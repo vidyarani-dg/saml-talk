@@ -1,0 +1,194 @@
+Security Assertion Markup Language (SAML) is a standard for logging users 
+into applications based on their sessions in another context. 
+
+It describes a framework that allows one computer to perform some security 
+functions on behalf of one or more other computers:
+
+- Authentication: Determining that the users are who they claim to be
+- Authorization: Determining if users have the right to access certain 
+systems or content  
+
+
+This single sign-on (SSO) login standard has significant advantages over 
+logging in using a username/password: 
+
+Benefits of SAML: 
+
+1. Usability - One-click access from portals or intranets, deep linking, 
+password elimination and automatically renewing sessions make life easier 
+for the user.
+
+2. Security - Based on strong digital signatures for authentication and 
+integrity, SAML is a secure single sign-on protocol that the largest and
+ most security conscious enterprises in the world rely on.
+
+3. Speed - SAML is fast. One browser redirect is all it takes to 
+securely sign a user into an application.
+
+4. Phishing Prevention - If you don’t have a password for an app, 
+you can’t be tricked into entering it on a fake login page.
+
+5. IT Friendly - SAML simplifies life for IT because it centralizes 
+authentication, provides greater visibility and makes directory integration
+easier.
+
+
+What is a SAML Provider ? 
+
+A Provider is an entity -> generally a server or other computer within a system that 
+helps user access the services she wants. 
+
+Systems that provide or consume SAML services are generally called Service Providers.
+An Identity Provide is an entity within the system that makes sure the user
+ really is who they claim to be - it provides authentication. 
+It may also determine what services, if any, that user is authorized to access 
+across various entities in the system. 
+
+There are various implementations that can provide authentication services in 
+line with the SAML standard - Salesforce, so can LDAP and Actove Directory.
+
+
+What is a SAML assertion ? 
+A SAML assertion is the XML document which contains all the information we've 
+been discussing and is transmitted from one computer to another.
+
+Once an identity provider has authenticated and authorzied that you have accesss to the services 
+you're interested in, it sends a SAML assertion to the server that actually can 
+actually provide those services to you. 
+
+Also, A SAML assertion may be encrypted for increased security.
+
+
+How does SAML work : 
+
+Service Provider initiated Single Sign on : 
+
+The user accesses the remote application using a link on an intranet, a bookmark, or similar and the application loads.
+The application identifies the user’s origin (by application subdomain, 
+user IP address, or similar) and 
+redirects the user back to the identity provider, asking for authentication. 
+This is the authentication request.
+
+The user either has an existing active browser session with the identity 
+provider or establishes one by logging into the identity provider.
+The identity provider builds the authentication response in the form of an XML-document – SAML assertion containing the 
+user’s username or email address, signs it using an X.509 certificate, and 
+posts this information to the service provider.
+
+The service provider, which already knows the identity provider and has a 
+certificate fingerprint, 
+retrieves the authentication response and validates it using the 
+certificate fingerprint.
+
+The identity of the user is established and the user is provided with app access.
+
+IDP initiated SSO: 
+
+- Bottom half of this diagram: 
+
+1. The user accesses the IDP either by specifying the SP to be used or the url of the service provider 
+
+2. Once th user is identified, the IDP creates a SAML Assertion containing the user
+info and redirects the browser to the Service Provider with the message
+
+3. The SP validates the SAML aSsertion and creates a SSO session for the user. 
+
+4. The SSO server will then redirect the user's browser back to the resource originally requested. 
+
+SAML vs. OAuth: What’s the difference? 
+OAuth is a somewhat newer standard than SAML, developed jointly by Google and Twitter beginning in 2006. 
+
+It was developed in part to compensate for SAML's deficiencies on mobile platforms 
+and is based on JSON rather than XML.
+Other than SAML's less-than-stellar mobile support, what's the difference between the two? 
+As we've seen, the SAML standard defines how providers can offer both authentication 
+and authorization services. 
+OAuth, on the other hand, only deals with authorization. 
+
+Another major difference is their use cases. 
+While SAML theoretically was designed for use on the open internet, 
+in practice it's most often deployed within enterprise networks for single sign-on. 
+
+OAuth, by contrast, was designed by Google and Twitter for internet scale.
+
+
+There are a few toolkits out there that can be used to integrate SAML into your application:
+
+1. Okta  - Paid 
+2. Auth0  
+3. Onelogin - Ease of use and opensource.
+
+OneLogin has also implemented and open-sourced SAML toolkits for five web development platforms:
+- Python 
+- Php 
+- Ruby
+- Java 
+- .Net
+
+ONELOGIN SAML: 
+----------------------------
+
+
+Onelogin's SAML python toolkit (python3-saml) lets you turn your Python application 
+into a SP (Service Provider) that can be connected to an IdP (Identity Provider).
+
+- SSO and SLO (SP-Initiated and IdP-Initiated).
+- Assertion and nameId encryption.
+- Assertion signatures.
+- Message signatures: AuthNRequest, LogoutRequest, LogoutResponses.
+- Enable an Assertion Consumer Service endpoint.
+- Enable a Single Logout Service endpoint.
+- Publish the SP metadata (which can be signed).
+
+Key features:
+- saml2int - Implements the SAML 2.0 Web Browser SSO Profile.
+- Session-less - Forget those common conflicts between the SP and the final app, the toolkit delegate session in the final app.
+- Easy to use - Programmer will be allowed to code high-level and low-level programming, 2 easy to use APIs are available.
+- Tested - Thoroughly tested.
+- Popular - OneLogin's customers use it. Add easy support to your django/flask web projects
+
+
+The toolkit contains examples for a demo django / flask application. 
+
+This can be found in demo/django and demo/flask folders in the src directory. 
+
+SAML requires a x.509 cert to sign and encrypt elements like NameID, 
+Message, Assertion, Metadata.
+
+The certs directory will hold the service provider certificates and the key. 
+This certificate can be self signed and onelogin also provides options to 
+generate self signed ceritifates, 
+
+The certificates can also be provided in the settings.json file in the "
+
+
+Settings
+First of all we need to configure the toolkit. 
+
+The SP's info, the IdP's info, and in some cases, 
+configure advanced security issues like signatures and encryption.
+
+There are two ways to provide the settings information:
+
+Use a settings.json file that we should locate in any folder, but indicates its path with the 'custom_base_path' parameter.
+
+Use a json object with the setting data and provide it directly to the constructor of the class (if your toolkit integation requires certs, remember to provide the 'custom_base_path' as part of the settings or as a parameter in the constructor.
+
+In the demo-django and in the demo-flask folders you will find a 'saml' folder
+, inside there is a 'certs' folder and a settings.json and a advanced_settings.json files. Those files contain the settings for the saml toolkit. Copy them in your project and set the correct values.
+
+Let us look at a sample settings.json file and what it means to us. 
+
+- Metadata Based Configuration
+----------------------------------
+
+The method above requires a little extra work to manually 
+specify attributes about the IdP. (And your SP application)
+
+There's an easier method -- use a metadata exchange. 
+Metadata is just an XML file that defines the capabilities of both the IdP 
+and the SP application. 
+It also contains the X.509 public key certificates which add to the 
+trusted relationship. 
+The IdP administrator can also configure custom settings for an 
+SP based on the metadata.
